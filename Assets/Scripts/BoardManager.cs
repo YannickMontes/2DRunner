@@ -16,15 +16,15 @@ public class BoardManager : MonoBehaviour
         {
             if(i==0)
             {
-                Instantiate(floor[0], new Vector3(i*1.28f,0.0f,0.0f), Quaternion.identity);
+                Instantiate(floor[0], new Vector3(i,0.0f,0.0f), Quaternion.identity);
             }
             else if(i==blocks-1)
             {
-                Instantiate(floor[2], new Vector3(i * 1.28f, 0.0f, 0.0f), Quaternion.identity);
+                Instantiate(floor[2], new Vector3(i, 0.0f, 0.0f), Quaternion.identity);
             }
             else
             {
-                Instantiate(floor[1], new Vector3(i * 1.28f, 0.0f, 0.0f), Quaternion.identity);
+                Instantiate(floor[1], new Vector3(i, 0.0f, 0.0f), Quaternion.identity);
             }
         }
 	}

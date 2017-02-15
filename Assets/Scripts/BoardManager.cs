@@ -1,40 +1,50 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
-using Random = UnityEngine.Random;
+using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour
 {
-    public int blocks;
-    public GameObject background;
-    public GameObject[] floor;
-    public bool generate;
+    public bool allowGeneration;
+    public GameObject[] chunks;
+    public Transform playerPosition;
+    public int chunkSize;
+
+    private bool generate;
+    public int beginGeneration = 0;
+    private int endGeneration = 0;
+    private List<GameObject> chunksGenerated;
 	// Use this for initialization
 	void Start ()
     {
-        if (generate)
-        {
-            Instantiate(background);
-            for (int i = 0; i < blocks; i++)
-            {
-                if (i == 0)
-                {
-                    Instantiate(floor[0], new Vector3(i, 0.0f, 0.0f), Quaternion.identity);
-                }
-                else if (i == blocks - 1)
-                {
-                    Instantiate(floor[2], new Vector3(i, 0.0f, 0.0f), Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(floor[1], new Vector3(i, 0.0f, 0.0f), Quaternion.identity);
-                }
-            }
-        }   
+        chunksGenerated = new List<GameObject>();
+        GenerateTerrain();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+    {
+        generate = (endGeneration - playerPosition.position.x < chunkSize ? true : false);
+        GenerateTerrain();
+        DeleteOldTerrain();
 	}
+
+    private void DeleteOldTerrain()
+    {
+        if(playerPosition.position.x - beginGeneration > chunkSize * 2)
+        {
+            GameObject tmp = chunksGenerated[0];
+            chunksGenerated.RemoveAt(0);
+            Destroy(tmp);
+            beginGeneration += chunkSize;
+        }
+    }
+
+    public void GenerateTerrain()
+    {
+        if(allowGeneration && generate)
+        {
+            GameObject tmp = (GameObject)Instantiate(chunks[0], new Vector3(endGeneration, 0.0f, 0.0f), Quaternion.identity);
+            chunksGenerated.Add(tmp);
+            endGeneration += chunkSize;
+        }
+    }
 }

@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
         
         if(Input.GetKeyDown(KeyCode.Space) && grounded)
         {
-            playerBody.velocity = new Vector2(playerBody.velocity.x, jumpForce);
+            playerBody.AddForce(Vector2.up * jumpForce);
         }
 
         this.UpdateAnimatorVariables();

@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 
     private Animator playerAnimator;
 
+    private Vector2 movement;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -28,7 +30,8 @@ public class PlayerController : MonoBehaviour {
     {
         grounded = Physics2D.IsTouchingLayers(this.playerCollider, ground);
 
-        playerBody.velocity = new Vector2(moveSpeed, playerBody.velocity.y);
+        this.movement = new Vector2(moveSpeed, this.playerBody.velocity.y);
+        //playerBody.velocity = new Vector2(moveSpeed, playerBody.velocity.y);
         
         if(Input.GetKeyDown(KeyCode.Space) && grounded)
         {
@@ -37,6 +40,11 @@ public class PlayerController : MonoBehaviour {
 
         this.UpdateAnimatorVariables();
 	}
+
+    void FixedUpdate()
+    {
+        this.playerBody.velocity = movement;
+    }
 
     private void UpdateAnimatorVariables()
     {

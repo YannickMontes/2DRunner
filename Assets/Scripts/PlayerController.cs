@@ -7,14 +7,12 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce;
 
     public bool grounded;
+    public bool extremeColliding;
     public LayerMask ground;
 
     private Collider2D playerCollider;
-
     private Rigidbody2D playerBody;
-
     private Animator playerAnimator;
-
     private Vector2 movement;
 
 	// Use this for initialization
@@ -30,10 +28,14 @@ public class PlayerController : MonoBehaviour {
     {
         grounded = Physics2D.IsTouchingLayers(this.playerCollider, ground);
 
-        this.movement = new Vector2(moveSpeed, this.playerBody.velocity.y);
+        if(!extremeColliding)
+            this.movement = new Vector2(moveSpeed, this.playerBody.velocity.y);
+        else
+            this.movement = new Vector2(0.0f, this.playerBody.velocity.y);
+
         //playerBody.velocity = new Vector2(moveSpeed, playerBody.velocity.y);
-        
-        if(Input.GetKeyDown(KeyCode.Space) && grounded)
+
+        if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             playerBody.AddForce(Vector2.up * jumpForce);
         }

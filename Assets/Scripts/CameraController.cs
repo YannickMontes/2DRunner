@@ -20,7 +20,9 @@ public class CameraController : MonoBehaviour {
     {
         distanceToMove = player.transform.position.x - lastPlayerPosition.x;
 
-        transform.position = new Vector3(transform.position.x + distanceToMove, transform.position.y, transform.position.z);
+        float distanceToMoveY = player.transform.position.y - lastPlayerPosition.y;
+
+        transform.position = new Vector3(transform.position.x + distanceToMove, transform.position.y + distanceToMoveY, transform.position.z);
 
         lastPlayerPosition = player.transform.position;
 	}

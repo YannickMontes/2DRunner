@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     private float speedCoeff = 7;
 
     public bool grounded;
+    public bool sliding;
     public bool extremeColliding; // To detect if the player colide with someting in front of him
     public LayerMask ground;
 
@@ -42,12 +43,15 @@ public class PlayerController : MonoBehaviour {
         this.HandleInputs();
 
         this.UpdateAnimatorVariables();
+
+        //Debug.Log(this.playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AdventureGirlSlide"));
 	}
 
     private void HandleInputs()
     {
         this.InputJump();
         this.InputSpeed();
+        this.InputSlide();
     }
 
     private void InputJump()
@@ -55,6 +59,18 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             playerBody.AddForce(Vector2.up * jumpForce);
+        }
+    }
+
+    private void InputSlide()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            sliding = true;
+        }
+        else
+        {
+            sliding = false;
         }
     }
 
@@ -86,5 +102,14 @@ public class PlayerController : MonoBehaviour {
     {
         this.playerAnimator.SetFloat("Speed", this.playerBody.velocity.x);
         this.playerAnimator.SetBool("Grounded", this.grounded);
+        this.playerAnimator.SetBool("Sliding", this.sliding);
+    }
+
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Crate" && this.playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AdventureGirlSlide"))
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

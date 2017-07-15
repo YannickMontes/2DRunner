@@ -10,6 +10,7 @@ public class BoardManager : MonoBehaviour
     public Transform playerPosition;
     public int chunkSize;
     public int nbChunksGenerated;
+    public int memory;
 
     private bool generate;
     private int beginGeneration = 0;
@@ -40,9 +41,9 @@ public class BoardManager : MonoBehaviour
     {
         if (allowGeneration && generate)
         {
-            this.GenerateBackground();
+            //this.GenerateBackground();
             this.GenerateChunks();
-            this.GenerateEnnemies();
+            //this.GenerateEnnemies();
             endGeneration += chunkSize;
         }
     }
@@ -79,9 +80,9 @@ public class BoardManager : MonoBehaviour
     #region Destroy
     private void DestroyOld()
     {
-        if (playerPosition.position.x - beginGeneration > chunkSize * 2)
+        if (playerPosition.position.x - beginGeneration > chunkSize * memory)
         {
-            this.DestroyOldBackground();
+            //this.DestroyOldBackground();
             this.DestroyOldChunks();
             beginGeneration += chunkSize;
         }

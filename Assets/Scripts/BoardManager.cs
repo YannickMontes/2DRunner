@@ -50,10 +50,7 @@ public class BoardManager : MonoBehaviour
 
     private void GenerateChunks()
     {
-        if(beginGeneration !=0)
-        {
-            currentHeight += this.UpOrDown();       
-        }
+        //currentHeight += this.UpOrDown();       
         GameObject chunkTmp = (GameObject)Instantiate(chunks[0], new Vector3(endGeneration, currentHeight*5, 0.0f), Quaternion.identity);
         chunksGenerated.Add(chunkTmp);
     }
@@ -112,7 +109,11 @@ public class BoardManager : MonoBehaviour
     private int UpOrDown()
     {
         float rand = Random.Range(0, 3);
-        if (rand == 0)//No change
+        if (beginGeneration == 0)
+        {
+            return 0;
+        }
+        else if (rand == 0)//No change
         {
             return 0;
         }

@@ -3,117 +3,88 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour
 {
-    public bool allowGeneration;
-    public GameObject[] chunks;
-    public GameObject ennemy;
-    public GameObject background;
     public Transform playerPosition;
-    public int chunkSize;
-    public int nbChunksGenerated;
-    public int memory;
 
-    private bool generate;
-    private int beginGeneration = 0;
-    private int endGeneration = 0;
-    private int currentHeight = 0;
-    private List<GameObject> chunksGenerated;
-    private List<GameObject> backgroundGenerated;
-    private List<GameObject> ennemiesGenerated;
+    private int currentXGeneration = 0;
+    private int currentYGeneration = 0;
     // Use this for initialization
     void Start ()
     {
-        chunksGenerated = new List<GameObject>();
-        backgroundGenerated = new List<GameObject>();
-        ennemiesGenerated = new List<GameObject>();
-        Generate();
+        
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        generate = (endGeneration - playerPosition.position.x < (chunkSize * nbChunksGenerated) ? true : false);
-        Generate();
-        DestroyOld();
+        if (currentXGeneration - 25 < playerPosition.position.x)
+        {
+            Generate();
+        }
 	}
 
-    #region Generate
     private void Generate()
     {
-        if (allowGeneration && generate)
+        int jumpSize = 0;
+        if (currentXGeneration > 10)
         {
-            //this.GenerateBackground();
-            this.GenerateChunks();
-            //this.GenerateEnnemies();
-            endGeneration += chunkSize;
+            //First choose a size for the jump
+            jumpSize = RandomGeneration(0, 5);
+            //Also choose at wich height it will be placed
+            currentYGeneration += UpOrDown();
         }
-    }
+        
+        //Then choose a size for the plateform
+        int plateformSize = RandomGeneration(3, 15);
+        
+        //Add to currentGeneration the size of the jump
+        currentXGeneration += jumpSize;
 
-    private void GenerateChunks()
-    {
-        //currentHeight += this.UpOrDown();       
-        GameObject chunkTmp = (GameObject)Instantiate(chunks[0], new Vector3(endGeneration, currentHeight*5, 0.0f), Quaternion.identity);
-        chunksGenerated.Add(chunkTmp);
-    }
+        //Create the gameobject that will contain the plateform
+        GameObject plateform = new GameObject();
+        plateform.layer = LayerMask.NameToLayer("Ground");
+        //Place it at the desired destination
+        plateform.transform.position = new Vector2(currentXGeneration, currentYGeneration);
+        //Then add composant to make graphical plateform
+        GameObject leftTile = LeftSidePlateformPooler.current.GetPooledObject();
+        leftTile.transform.parent = plateform.transform;
+        leftTile.transform.localPosition = new Vector2(0, 0);
 
-    private void GenerateEnnemies()
-    {
-        int rand;
-        do
+        for (int i = 1; i < plateformSize - 1; i++)
         {
-            rand = Random.Range(0, chunkSize);
-        } while (!PositionOverlapOtherGameObject(new Vector2(endGeneration + rand, currentHeight * 5)));
-        PositionOverlapOtherGameObject(new Vector2(endGeneration + rand, currentHeight * 5));
-        GameObject ennemyTmp = Instantiate(ennemy, new Vector3(endGeneration + rand, currentHeight*5+2, 0.0f), Quaternion.identity);
-        ennemiesGenerated.Add(ennemyTmp);
-    }
-
-    private void GenerateBackground()
-    {
-        GameObject bgTmp = (GameObject)Instantiate(background, new Vector3(endGeneration + ((chunkSize-1) / 2.0f), 10.0f, 0.0f), Quaternion.identity);
-        backgroundGenerated.Add(bgTmp);
-    }
-    #endregion
-
-    #region Destroy
-    private void DestroyOld()
-    {
-        if (playerPosition.position.x - beginGeneration > chunkSize * memory)
-        {
-            //this.DestroyOldBackground();
-            this.DestroyOldChunks();
-            beginGeneration += chunkSize;
+            GameObject middleTile = MiddleTilePlateformPooler.current.GetPooledObject();
+            middleTile.transform.parent = plateform.transform;
+            middleTile.transform.localPosition = new Vector2(i, 0);
         }
+
+        GameObject rightTile = RightSidePlateformPooler.current.GetPooledObject();
+        rightTile.transform.parent = plateform.transform;
+        rightTile.transform.localPosition = new Vector2(plateformSize-1, 0);
+
+        BoxCollider2D plateformCollider = plateform.AddComponent<BoxCollider2D>();
+        plateformCollider.size = new Vector2(plateformSize, 0.735f);
+        float xOffset = ((plateformSize / 2) - 0.5f);
+        plateformCollider.offset = new Vector2(xOffset, 0.0f);
+
+        //Then add the size of the plateform to the currentGeneration
+        currentXGeneration += plateformSize;
     }
 
-    private void DestroyOldChunks()
-    { 
-        GameObject chunkTmp = chunksGenerated[0];
-        chunksGenerated.RemoveAt(0);
-        Destroy(chunkTmp);
-    }
-
-    private void DestroyOldBackground()
-    {
-        GameObject bgTmp = backgroundGenerated[0];
-        backgroundGenerated.RemoveAt(0);
-        Destroy(bgTmp);
-    }
-
-    #endregion
+    
 
     private bool PositionOverlapOtherGameObject(Vector2 position)
     {
         return Physics2D.OverlapBox(position, new Vector2(1, 1), 1);
     }
 
+    private int RandomGeneration(int min, int max)
+    {
+        return Random.Range(min, max);
+    }
+
     private int UpOrDown()
     {
         float rand = Random.Range(0, 3);
-        if (beginGeneration == 0)
-        {
-            return 0;
-        }
-        else if (rand == 0)//No change
+        if (rand == 0)//No change
         {
             return 0;
         }

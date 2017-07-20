@@ -18,33 +18,50 @@ public class BoardManager : MonoBehaviour
     {
         if (currentXGeneration - 25 < playerPosition.position.x)
         {
-            Generate();
+            GeneratePlateform();
         }
 	}
 
-    private void Generate()
+    private void GeneratePlateform()
     {
         int jumpSize = 0;
-        if (currentXGeneration > 10)
+        int plateformSize = 0;
+
+        if (currentXGeneration == 0)
         {
-            //First choose a size for the jump
+            plateformSize = 30;
+        }
+        else
+        {
+            plateformSize = RandomGeneration(9, 25);
             jumpSize = RandomGeneration(2, 7);
-            //Also choose at wich height it will be placed
             currentYGeneration += UpOrDown();
         }
-        
-        //Then choose a size for the plateform
-        int plateformSize = RandomGeneration(9, 25);
-        
-        //Add to currentGeneration the size of the jump
-        currentXGeneration += jumpSize;
 
-        //Create the gameobject that will contain the plateform
+        CreatePlateformObject(jumpSize, plateformSize);
+
+        currentXGeneration += plateformSize;
+    }
+
+    private void CreatePlateformObject(int jumpSize, int plateformSize)
+    {
         GameObject plateform = new GameObject();
         plateform.layer = LayerMask.NameToLayer("Ground");
-        //Place it at the desired destination
+
+        currentXGeneration += jumpSize;
         plateform.transform.position = new Vector2(currentXGeneration, currentYGeneration);
-        //Then add composant to make graphical plateform
+
+        ConstructPlateformWithTiles(plateform, plateformSize);
+
+        BoxCollider2D plateformCollider = plateform.AddComponent<BoxCollider2D>();
+        plateformCollider.size = new Vector2(plateformSize, 0.735f);
+        float xOffset = ((plateformSize / 2f) - 0.5f);
+        plateformCollider.offset = new Vector2(xOffset, 0.0f);
+        plateform.AddComponent<PlateformDestroyer>();
+    }
+
+    private void ConstructPlateformWithTiles(GameObject plateform, int plateformSize)
+    {
         GameObject leftTile = LeftSidePlateformPooler.current.GetPooledObject();
         leftTile.transform.parent = plateform.transform;
         leftTile.transform.localPosition = new Vector2(0, 0);
@@ -58,21 +75,9 @@ public class BoardManager : MonoBehaviour
 
         GameObject rightTile = RightSidePlateformPooler.current.GetPooledObject();
         rightTile.transform.parent = plateform.transform;
-        rightTile.transform.localPosition = new Vector2(plateformSize-1, 0);
-
-        BoxCollider2D plateformCollider = plateform.AddComponent<BoxCollider2D>();
-        plateformCollider.size = new Vector2(plateformSize, 0.735f);
-        float xOffset = ((plateformSize / 2) - 0.5f);
-        plateformCollider.offset = new Vector2(xOffset, 0.0f);
-
-        plateform.AddComponent<PlateformDestroyer>();
-
-        //Then add the size of the plateform to the currentGeneration
-        currentXGeneration += plateformSize;
+        rightTile.transform.localPosition = new Vector2(plateformSize - 1, 0);
     }
-
     
-
     private bool PositionOverlapOtherGameObject(Vector2 position)
     {
         return Physics2D.OverlapBox(position, new Vector2(1, 1), 1);

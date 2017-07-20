@@ -28,13 +28,13 @@ public class BoardManager : MonoBehaviour
         if (currentXGeneration > 10)
         {
             //First choose a size for the jump
-            jumpSize = RandomGeneration(0, 5);
+            jumpSize = RandomGeneration(2, 7);
             //Also choose at wich height it will be placed
             currentYGeneration += UpOrDown();
         }
         
         //Then choose a size for the plateform
-        int plateformSize = RandomGeneration(3, 15);
+        int plateformSize = RandomGeneration(9, 25);
         
         //Add to currentGeneration the size of the jump
         currentXGeneration += jumpSize;
@@ -64,6 +64,8 @@ public class BoardManager : MonoBehaviour
         plateformCollider.size = new Vector2(plateformSize, 0.735f);
         float xOffset = ((plateformSize / 2) - 0.5f);
         plateformCollider.offset = new Vector2(xOffset, 0.0f);
+
+        plateform.AddComponent<PlateformDestroyer>();
 
         //Then add the size of the plateform to the currentGeneration
         currentXGeneration += plateformSize;

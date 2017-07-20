@@ -8,7 +8,7 @@ public abstract class AbstractObjectPooler : MonoBehaviour {
     public int pooledAmount;
     public bool expandable;
 
-    protected List<GameObject> pooledObjects;
+    public List<GameObject> pooledObjects;
 
     void Start ()
     {

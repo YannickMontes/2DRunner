@@ -26,7 +26,11 @@ public class BoardManager : MonoBehaviour
     private void Generate()
     {
         GeneratePlateform();
-        GenerateObjects();
+        if (lastGeneratedPlateform.transform.position.x > 0)
+        {
+            GenerateObjects();
+            GenerateEnnemies();
+        }
     }
 
     private void GeneratePlateform()
@@ -88,12 +92,9 @@ public class BoardManager : MonoBehaviour
 
     private void GenerateObjects()
     {
-        if (lastGeneratedPlateform.transform.position.x > 0)
+        if (Random.Range(0f, 1f) > 0.25)
         {
-            if (Random.Range(0f, 1f) > 0.25)
-            {
-                CreateCrate();
-            }
+            CreateCrate();
         }
     }
 
@@ -101,6 +102,19 @@ public class BoardManager : MonoBehaviour
     {
         GameObject crate = CratePooler.current.GetPooledObject();
         crate.transform.position = new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), this.currentYGeneration+0.85f);
+    }
+
+    private void GenerateEnnemies()
+    {
+        if (Random.Range(0f, 1f) > 0.25)
+        {
+            CreateZombie();
+        }
+    }
+
+    private void CreateZombie()
+    {
+
     }
     
     private bool PositionOverlapOtherGameObject(Vector2 position)

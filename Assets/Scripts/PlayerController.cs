@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
     public static bool extremeColliding; // To detect if the player colide with someting in front of him
     public LayerMask ground;
 
-    private Collider2D playerCollider;
+    //private Collider2D playerCollider;
     private Rigidbody2D playerBody;
     private Animator playerAnimator;
     private Vector2 movement;
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
     {
         this.moveSpeed = this.moveSpeedMax;
         this.playerBody = GetComponent<Rigidbody2D>();
-        this.playerCollider = GetComponent<Collider2D>();
+        //this.playerCollider = GetComponent<Collider2D>();
         this.playerAnimator = GetComponent<Animator>();
 	}
 	

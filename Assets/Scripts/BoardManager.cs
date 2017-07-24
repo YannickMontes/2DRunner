@@ -88,9 +88,12 @@ public class BoardManager : MonoBehaviour
 
     private void GenerateObjects()
     {
-        if (Random.Range(0f, 1f) > 0.25)
+        if (lastGeneratedPlateform.transform.position.x > 0)
         {
-            CreateCrate();
+            if (Random.Range(0f, 1f) > 0.25)
+            {
+                CreateCrate();
+            }
         }
     }
 

@@ -7,6 +7,7 @@ public class BoardManager : MonoBehaviour
 
     private int currentXGeneration = 0;
     private int currentYGeneration = 0;
+    private GameObject lastGeneratedPlateform;
     // Use this for initialization
     void Start ()
     {
@@ -18,9 +19,15 @@ public class BoardManager : MonoBehaviour
     {
         if (currentXGeneration - 25 < playerPosition.position.x)
         {
-            GeneratePlateform();
+            Generate();
         }
 	}
+
+    private void Generate()
+    {
+        GeneratePlateform();
+        GenerateObjects();
+    }
 
     private void GeneratePlateform()
     {
@@ -45,19 +52,19 @@ public class BoardManager : MonoBehaviour
 
     private void CreatePlateformObject(int jumpSize, int plateformSize)
     {
-        GameObject plateform = new GameObject();
-        plateform.layer = LayerMask.NameToLayer("Ground");
+        lastGeneratedPlateform = new GameObject();
+        lastGeneratedPlateform.layer = LayerMask.NameToLayer("Ground");
 
         currentXGeneration += jumpSize;
-        plateform.transform.position = new Vector2(currentXGeneration, currentYGeneration);
+        lastGeneratedPlateform.transform.position = new Vector2(currentXGeneration, currentYGeneration);
 
-        ConstructPlateformWithTiles(plateform, plateformSize);
+        ConstructPlateformWithTiles(lastGeneratedPlateform, plateformSize);
 
-        BoxCollider2D plateformCollider = plateform.AddComponent<BoxCollider2D>();
+        BoxCollider2D plateformCollider = lastGeneratedPlateform.AddComponent<BoxCollider2D>();
         plateformCollider.size = new Vector2(plateformSize, 0.735f);
         float xOffset = ((plateformSize / 2f) - 0.5f);
         plateformCollider.offset = new Vector2(xOffset, 0.0f);
-        plateform.AddComponent<PlateformDestroyer>();
+        lastGeneratedPlateform.AddComponent<PlateformDestroyer>();
     }
 
     private void ConstructPlateformWithTiles(GameObject plateform, int plateformSize)
@@ -76,6 +83,20 @@ public class BoardManager : MonoBehaviour
         GameObject rightTile = RightSidePlateformPooler.current.GetPooledObject();
         rightTile.transform.parent = plateform.transform;
         rightTile.transform.localPosition = new Vector2(plateformSize - 1, 0);
+    }
+
+    private void GenerateObjects()
+    {
+        if (Random.Range(0f, 1f) > 0.25)
+        {
+            CreateCrate();
+        }
+    }
+
+    private void CreateCrate()
+    {
+        GameObject crate = CratePooler.current.GetPooledObject();
+        crate.transform.position = new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), this.currentYGeneration+0.85f);
     }
     
     private bool PositionOverlapOtherGameObject(Vector2 position)

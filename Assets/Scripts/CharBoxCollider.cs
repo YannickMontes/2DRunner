@@ -10,13 +10,11 @@ public class CharBoxCollider : MonoBehaviour
         this.player = this.gameObject.GetComponentInParent<PlayerController>();
     }
 
-    public void OnCollisionEnter2D(Collision2D coll)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        player.extremeColliding = true;
-    }
-
-    public void OnCollisionExit2D(Collision2D coll)
-    {
-        player.extremeColliding = false;
+        if (collision.tag == "Crate")
+        {
+            collision.gameObject.SetActive(false);
+        }
     }
 }

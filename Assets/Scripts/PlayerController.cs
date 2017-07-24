@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        grounded = Physics2D.IsTouchingLayers(this.playerCollider, ground);
+        grounded = IsGrounded();
 
         if(!extremeColliding)
             this.movement = new Vector2(moveSpeed, this.playerBody.velocity.y);
@@ -46,6 +46,11 @@ public class PlayerController : MonoBehaviour {
 
         //Debug.Log(this.playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AdventureGirlSlide"));
 	}
+
+    private bool IsGrounded()
+    {
+        return GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>().IsTouchingLayers(ground);
+    }
 
     private void HandleInputs()
     {
@@ -103,5 +108,13 @@ public class PlayerController : MonoBehaviour {
         this.playerAnimator.SetFloat("Speed", this.playerBody.velocity.x);
         this.playerAnimator.SetBool("Grounded", PlayerController.grounded);
         this.playerAnimator.SetBool("Sliding", PlayerController.sliding);
+    }
+
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Ground" && !IsGrounded() && this.playerBody.velocity.x == 0)
+        {
+            this.playerBody.position = new Vector2(this.playerBody.position.x, this.playerBody.position.y - 1);
+        }
     }
 }

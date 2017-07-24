@@ -53,6 +53,7 @@ public class BoardManager : MonoBehaviour
     private void CreatePlateformObject(int jumpSize, int plateformSize)
     {
         lastGeneratedPlateform = new GameObject();
+        lastGeneratedPlateform.tag = "Ground";
         lastGeneratedPlateform.layer = LayerMask.NameToLayer("Ground");
 
         currentXGeneration += jumpSize;

@@ -27,7 +27,7 @@ public class PlateformDestroyer : MonoBehaviour {
                 this.transform.GetChild(i).gameObject.SetActive(false);
             }
             this.transform.DetachChildren();
-            Destroy(gameObject);
+			this.gameObject.SetActive (false);
         }
     }
 }

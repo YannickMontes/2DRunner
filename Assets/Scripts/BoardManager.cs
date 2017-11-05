@@ -8,19 +8,24 @@ public class BoardManager : MonoBehaviour
     private int currentXGeneration = 0;
     private int currentYGeneration = 0;
     private GameObject lastGeneratedPlateform;
+	private float lastBGPosition = -26.2f;
     // Use this for initialization
     void Start ()
     {
-        
+		GenerateBackground ();
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         if (currentXGeneration - 25 < playerPosition.position.x)
         {
             Generate();
         }
+		if (playerPosition.position.x - lastBGPosition > -5) 
+		{
+			GenerateBackground ();
+		}
 	}
 
     private void Generate()
@@ -32,6 +37,16 @@ public class BoardManager : MonoBehaviour
             GenerateEnnemies();
         }
     }
+
+	private void GenerateBackground()
+	{
+		Debug.Log ("1 BG");
+		lastBGPosition += 51.2f;
+		GameObject background = BackgroundPooler.current.GetPooledObject ();
+		background.transform.position = new Vector3 (lastBGPosition, 3.0f, 0.0f);
+		if(background.GetComponent<BackgroundDestroyer>() == null)
+			background.AddComponent<BackgroundDestroyer> ();
+	}
 
     private void GeneratePlateform()
     {
@@ -65,11 +80,14 @@ public class BoardManager : MonoBehaviour
 
         ConstructPlateformWithTiles(lastGeneratedPlateform, plateformSize);
 
-        BoxCollider2D plateformCollider = lastGeneratedPlateform.AddComponent<BoxCollider2D>();
-        plateformCollider.size = new Vector2(plateformSize, 0.735f);
-        float xOffset = ((plateformSize / 2f) - 0.5f);
-        plateformCollider.offset = new Vector2(xOffset, 0.0f);
-        lastGeneratedPlateform.AddComponent<PlateformDestroyer>();
+		if (lastGeneratedPlateform.GetComponent<BoxCollider2D> () == null) {
+			BoxCollider2D plateformCollider = lastGeneratedPlateform.AddComponent<BoxCollider2D>();
+			plateformCollider.size = new Vector2(plateformSize, 0.735f);
+			float xOffset = ((plateformSize / 2f) - 0.5f);
+			plateformCollider.offset = new Vector2(xOffset, 0.0f);
+		}
+		if(lastGeneratedPlateform.GetComponent<PlateformDestroyer>() == null)
+        	lastGeneratedPlateform.AddComponent<PlateformDestroyer>();
     }
 
     private void ConstructPlateformWithTiles(GameObject plateform, int plateformSize)

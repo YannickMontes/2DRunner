@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class CreateDestroyer : MonoBehaviour {
 
+	private Transform playerPosition;
+
+	public void Start()
+	{
+		playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+	}
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
         Unable(collider);
@@ -18,6 +25,14 @@ public class CreateDestroyer : MonoBehaviour {
     {
         Unable(collision.collider);
     }
+
+	private void FixedUpdate()
+	{
+		if (this.transform.position.x + 40 < playerPosition.transform.position.x) 
+		{
+			this.gameObject.SetActive (false);
+		}
+	}
 
     private void Unable(Collider2D collider)
     {

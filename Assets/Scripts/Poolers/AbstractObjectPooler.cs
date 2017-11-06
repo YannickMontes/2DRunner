@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AbstractObjectPooler : MonoBehaviour {
 
-    public GameObject pooledObject;
+    public List<GameObject> pooledObject;
     public int pooledAmount;
     public bool expandable;
 
@@ -15,7 +15,7 @@ public abstract class AbstractObjectPooler : MonoBehaviour {
         this.pooledObjects = new List<GameObject>();
         for (int i = 0; i < this.pooledAmount; i++)
         {
-            GameObject tmp = (GameObject)Instantiate(pooledObject);
+			GameObject tmp = (GameObject)Instantiate(GetRandomPrefab());
             tmp.SetActive(false);
             this.pooledObjects.Add(tmp);
         }	
@@ -34,11 +34,22 @@ public abstract class AbstractObjectPooler : MonoBehaviour {
 
         if (expandable)
         {
-            GameObject obj = (GameObject)Instantiate(pooledObject);
+			GameObject obj = (GameObject)Instantiate(GetRandomPrefab());
             pooledObjects.Add(obj);
             return obj;
         }
 
         return null;
     }
+
+
+
+	private GameObject GetRandomPrefab()
+	{
+		if (pooledObject.Count == 1)
+			return pooledObject [0];
+		else {
+			return pooledObject [Random.Range(0, pooledObject.Count)];
+		}
+	}
 }

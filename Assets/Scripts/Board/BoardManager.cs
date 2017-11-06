@@ -3,6 +3,16 @@ using System.Collections.Generic;
 
 public class BoardManager : MonoBehaviour
 {
+	private const int Y_LOWER_LIMIT = -3;
+	private const int Y_HIGHER_LIMIT = 5;
+	private const int X_DISTANCE_TO_GENERATION = 25;
+	private const float DISTANCE_BETWEEN_2_BGS = 51.2f;
+	private const int MIN_JUMP_SIZE = 2;
+	private const int MAX_JUMP_SIZE = 7;
+	private const int MIN_PLATEFORM_SIZE = 9;
+	private const int MAX_PLATEFORM_SIZE = 25;
+
+
     public Transform playerPosition;
 
     private int currentXGeneration = 0;
@@ -18,7 +28,7 @@ public class BoardManager : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        if (currentXGeneration - 25 < playerPosition.position.x)
+		if (currentXGeneration - X_DISTANCE_TO_GENERATION < playerPosition.position.x)
         {
             Generate();
         }
@@ -40,12 +50,9 @@ public class BoardManager : MonoBehaviour
 
 	private void GenerateBackground()
 	{
-		Debug.Log ("1 BG");
-		lastBGPosition += 51.2f;
+		lastBGPosition += DISTANCE_BETWEEN_2_BGS;
 		GameObject background = BackgroundPooler.current.GetPooledObject ();
 		background.transform.position = new Vector3 (lastBGPosition, 3.0f, 0.0f);
-		if(background.GetComponent<BackgroundDestroyer>() == null)
-			background.AddComponent<BackgroundDestroyer> ();
 	}
 
     private void GeneratePlateform()
@@ -59,9 +66,12 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            plateformSize = RandomGeneration(9, 25);
-            jumpSize = RandomGeneration(2, 7);
-            currentYGeneration += UpOrDown();
+			plateformSize = RandomGeneration(MIN_PLATEFORM_SIZE, MAX_PLATEFORM_SIZE);
+			jumpSize = RandomGeneration(MIN_JUMP_SIZE, MAX_JUMP_SIZE);
+			if (HeightLimitsReached()) {
+				currentYGeneration += UpOrDown();
+			}
+            
         }
 
         CreatePlateformObject(jumpSize, plateformSize);
@@ -110,17 +120,47 @@ public class BoardManager : MonoBehaviour
 
     private void GenerateObjects()
     {
+		int positionUsed = 0;
         if (Random.Range(0f, 1f) > 0.25)
         {
-            CreateCrate();
+			positionUsed = CreateCrate();
         }
+		if (Random.Range (0f, 1f) > 0.1) 
+		{
+			CreateCactus (positionUsed);
+		}
     }
 
-    private void CreateCrate()
+    private int CreateCrate()
     {
         GameObject crate = CratePooler.current.GetPooledObject();
         crate.transform.position = new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), this.currentYGeneration+0.85f);
+		return (int)crate.transform.position.x;
     }
+
+	private void CreateCactus(int usedPos)
+	{
+		Debug.Log ("UN CACTUS A MALIBU");
+		GameObject cactus = CactusPooler.current.GetPooledObject ();
+		float height = 0f;
+		string name = cactus.GetComponent<SpriteRenderer> ().sprite.name;
+		if(name == "Cactus (2)")
+		{
+			height = this.currentYGeneration + 0.81f;
+		}
+		else if(name == "Cactus (3)")
+		{
+			height = this.currentYGeneration + 1.33f;
+		}
+		else if(name == "Cactus (1)")
+		{
+			height = this.currentYGeneration + 1.48f;
+		}
+		do {
+			cactus.transform.position = new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), height);
+		} while(cactus.transform.position.x == usedPos);
+		Debug.Log ("Cactus " + name + " placed at " + height);
+	}
 
     private void GenerateEnnemies()
     {
@@ -144,6 +184,11 @@ public class BoardManager : MonoBehaviour
     {
         return Random.Range(min, max);
     }
+
+	private bool HeightLimitsReached()
+	{
+		return (currentYGeneration > Y_LOWER_LIMIT && currentYGeneration < Y_HIGHER_LIMIT);
+	}
 
     private int UpOrDown()
     {

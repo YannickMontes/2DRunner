@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackgroundDestroyer : MonoBehaviour {
+public class ObjectDestroyer : MonoBehaviour {
 	
 	private Transform playerPosition;
 

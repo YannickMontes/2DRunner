@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 
     private float moveSpeed;
     private float speedCoeff = 7;
+	private const float MIN_Y = -15.0f;
 
     public static bool grounded;
     public static bool sliding;
@@ -31,18 +32,23 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        grounded = IsGrounded();
+		if (this.transform.position.y > MIN_Y) {
+			grounded = IsGrounded ();
 
-        if(!extremeColliding)
-            this.movement = new Vector2(moveSpeed, this.playerBody.velocity.y);
-        else
-            this.movement = new Vector2(0.0f, this.playerBody.velocity.y);
+			if (!extremeColliding)
+				this.movement = new Vector2 (moveSpeed, this.playerBody.velocity.y);
+			else
+				this.movement = new Vector2 (0.0f, this.playerBody.velocity.y);
 
-        //playerBody.velocity = new Vector2(moveSpeed, playerBody.velocity.y);
+			//playerBody.velocity = new Vector2(moveSpeed, playerBody.velocity.y);
 
-        this.HandleInputs();
+			this.HandleInputs ();
 
-        this.UpdateAnimatorVariables();
+			this.UpdateAnimatorVariables ();
+		} else {
+			this.playerBody.velocity = Vector3.zero;
+			this.movement = Vector2.zero;
+		}
 	}
 
     private bool IsGrounded()

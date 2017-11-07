@@ -4,6 +4,8 @@ using System.Collections;
 public class CameraController : MonoBehaviour {
 
     private PlayerController player;
+	private const float MAX_Y = 10.85f;
+	private const float MIN_Y = -5.0f;
 
     private Vector3 lastPlayerPosition;
     private float distanceToMove;
@@ -16,14 +18,21 @@ public class CameraController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update ()
+    void FixedUpdate ()
     {
-        distanceToMove = player.transform.position.x - lastPlayerPosition.x;
+		if (IsInBounds ()) {
+			distanceToMove = player.transform.position.x - lastPlayerPosition.x;
 
-        float distanceToMoveY = player.transform.position.y - lastPlayerPosition.y;
+			float distanceToMoveY = player.transform.position.y - lastPlayerPosition.y;
 
-        transform.position = new Vector3(transform.position.x + distanceToMove, transform.position.y + distanceToMoveY, transform.position.z);
+			transform.position = new Vector3(transform.position.x + distanceToMove, transform.position.y + distanceToMoveY, transform.position.z);
 
-        lastPlayerPosition = player.transform.position;
+			lastPlayerPosition = player.transform.position;
+		}
+	}
+
+	private bool IsInBounds()
+	{
+		return (this.transform.position.y > MIN_Y && this.transform.position.y < MAX_Y);
 	}
 }

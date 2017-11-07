@@ -8,6 +8,8 @@ public class PlayerStats : MonoBehaviour {
 	private bool vulnerable;
 	private Animator animator;
 
+	private List<GameObject> lifeUI;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -15,6 +17,10 @@ public class PlayerStats : MonoBehaviour {
 		vulnerable = true;
 		this.animator = this.GetComponent<Animator> ();
 		this.animator.SetInteger ("Life", life);
+		lifeUI = new List<GameObject> ();
+		for (int i = 1; i <= 3; i++) {
+			lifeUI.Add (GameObject.Find ("UILife" + i));
+		}
 	}
 	
 	// Update is called once per frame
@@ -22,8 +28,7 @@ public class PlayerStats : MonoBehaviour {
 	{
 		if (life == 0) 
 		{
-			Debug.Log ("PLus de vie");
-			this.GetComponent<PlayerController> ().enabled = false;
+			this.GetComponent<PlayerController> ().Stop ();
 		}
 	}
 
@@ -35,6 +40,7 @@ public class PlayerStats : MonoBehaviour {
 			StartCoroutine (Fade ());
 			vulnerable = false;
 			this.animator.SetInteger ("Life", life);
+			lifeUI [life].SetActive (false);
 		}
 	}
 

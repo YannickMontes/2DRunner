@@ -46,8 +46,7 @@ public class PlayerController : MonoBehaviour {
 
 			this.UpdateAnimatorVariables ();
 		} else {
-			this.playerBody.velocity = Vector3.zero;
-			this.movement = Vector2.zero;
+			Stop ();
 		}
 	}
 
@@ -122,4 +121,11 @@ public class PlayerController : MonoBehaviour {
             this.playerBody.position = new Vector2(this.playerBody.position.x, this.playerBody.position.y - 1);
         }
     }
+
+	public void Stop()
+	{
+		this.playerBody.velocity = Vector3.zero;
+		this.movement = Vector2.zero;
+		this.enabled = false;
+	}
 }

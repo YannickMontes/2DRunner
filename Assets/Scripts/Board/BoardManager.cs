@@ -7,10 +7,10 @@ public class BoardManager : MonoBehaviour
 	private const int Y_HIGHER_LIMIT = 5;
 	private const int X_DISTANCE_TO_GENERATION = 25;
 	private const float DISTANCE_BETWEEN_2_BGS = 51.2f;
-	private const int MIN_JUMP_SIZE = 2;
-	private const int MAX_JUMP_SIZE = 7;
+	private const int MIN_JUMP_SIZE = 3;
+	private const int MAX_JUMP_SIZE = 10;
 	private const int MIN_PLATEFORM_SIZE = 9;
-	private const int MAX_PLATEFORM_SIZE = 25;
+	private const int MAX_PLATEFORM_SIZE = 40;
 
 
     public Transform playerPosition;
@@ -18,7 +18,7 @@ public class BoardManager : MonoBehaviour
     private int currentXGeneration = 0;
     private int currentYGeneration = 0;
     private GameObject lastGeneratedPlateform;
-	private float lastBGPosition = -26.2f;
+	private float lastBGPosition = -77.4f;
     // Use this for initialization
     void Start ()
     {

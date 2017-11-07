@@ -6,12 +6,15 @@ public class PlayerStats : MonoBehaviour {
 
 	private int life;
 	private bool vulnerable;
+	private Animator animator;
 
 	// Use this for initialization
 	void Start () 
 	{
 		life = 3;	
 		vulnerable = true;
+		this.animator = this.GetComponent<Animator> ();
+		this.animator.SetInteger ("Life", life);
 	}
 	
 	// Update is called once per frame
@@ -19,7 +22,8 @@ public class PlayerStats : MonoBehaviour {
 	{
 		if (life == 0) 
 		{
-			//End the game
+			Debug.Log ("PLus de vie");
+			this.GetComponent<PlayerController> ().enabled = false;
 		}
 	}
 
@@ -30,6 +34,7 @@ public class PlayerStats : MonoBehaviour {
 			life--;
 			StartCoroutine (Fade ());
 			vulnerable = false;
+			this.animator.SetInteger ("Life", life);
 		}
 	}
 

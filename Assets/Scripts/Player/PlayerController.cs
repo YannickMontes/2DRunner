@@ -43,12 +43,11 @@ public class PlayerController : MonoBehaviour {
         this.HandleInputs();
 
         this.UpdateAnimatorVariables();
-
-        //Debug.Log(this.playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("AdventureGirlSlide"));
 	}
 
     private bool IsGrounded()
     {
+		Debug.Log (GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>());
         return GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>().IsTouchingLayers(ground);
     }
 

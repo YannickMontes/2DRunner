@@ -20,7 +20,7 @@ public class ObjectDestroyer : MonoBehaviour {
 
 	private void Destroy()
 	{
-		if (this.transform.position.x + 40 < playerPosition.transform.position.x)
+		if (this.transform.position.x + 60 < playerPosition.transform.position.x)
 		{
 			this.gameObject.SetActive (false);
 		}

@@ -20,7 +20,7 @@ public class PlateformDestroyer : MonoBehaviour {
 
     private void Destroy()
     {
-        if (this.transform.position.x + 40 < playerPosition.transform.position.x)
+        if (this.transform.position.x + 60 < playerPosition.transform.position.x)
         {
             for (int i = 0; i < this.transform.childCount; i++)
             {

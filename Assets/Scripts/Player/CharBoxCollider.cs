@@ -13,6 +13,7 @@ public class CharBoxCollider : MonoBehaviour
         if (collision.tag == "Crate")
         {
             collision.gameObject.SetActive(false);
+            Debug.Log("a quelle heure on est la?");
         }
     }
 }

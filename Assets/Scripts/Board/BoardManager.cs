@@ -140,7 +140,6 @@ public class BoardManager : MonoBehaviour
 
 	private void CreateCactus(int usedPos)
 	{
-		Debug.Log ("UN CACTUS A MALIBU");
 		GameObject cactus = CactusPooler.current.GetPooledObject ();
 		float height = 0f;
 		string name = cactus.GetComponent<SpriteRenderer> ().sprite.name;
@@ -159,7 +158,6 @@ public class BoardManager : MonoBehaviour
 		do {
 			cactus.transform.position = new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), height);
 		} while(cactus.transform.position.x == usedPos);
-		Debug.Log ("Cactus " + name + " placed at " + height);
 	}
 
     private void GenerateEnnemies()

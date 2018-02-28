@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     public static bool extremeColliding; // To detect if the player colide with someting in front of him
     public LayerMask ground;
 
+    public BoxCollider2D bottomCollider;
+
     //private Collider2D playerCollider;
     private Rigidbody2D playerBody;
     private Animator playerAnimator;
@@ -52,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 
     private bool IsGrounded()
     {
-        return GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>().IsTouchingLayers(ground);
+        return bottomCollider.IsTouchingLayers(ground);
     }
 
     private void HandleInputs()

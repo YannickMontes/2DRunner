@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour {
 
     private bool IsGrounded()
     {
-		Debug.Log (GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>());
         return GameObject.FindGameObjectWithTag("PlayerBotCollider").GetComponent<BoxCollider2D>().IsTouchingLayers(ground);
     }
 

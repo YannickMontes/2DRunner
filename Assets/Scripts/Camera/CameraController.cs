@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour {
 
     private PlayerController player;
 	private const float MAX_Y = 10.85f;
-	private const float MIN_Y = -5.0f;
+	private const float MIN_Y = -4f;
 
     private Vector3 lastPlayerPosition;
     private float distanceToMove;

@@ -16,8 +16,7 @@ public class MySceneManager : MonoBehaviour {
 		return instance;
 	}
 
-	// Use this for initialization
-	void Start () {
+    void Awake () {
 		if (instance != null) 
 		{
 			Destroy (this);
@@ -25,11 +24,6 @@ public class MySceneManager : MonoBehaviour {
 		instance = this;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	public void LoadScene(string name)
 	{
 		SceneManager.LoadScene (name, LoadSceneMode.Single);

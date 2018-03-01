@@ -28,7 +28,7 @@ public class BoardManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate ()
+	void Update ()
     {
 		if (currentXGeneration - X_DISTANCE_TO_GENERATION < playerPosition.position.x)
         {
@@ -53,7 +53,7 @@ public class BoardManager : MonoBehaviour
 	private void GenerateBackground()
 	{
 		lastBGPosition += DISTANCE_BETWEEN_2_BGS;
-        GameObject background = objectPooler.SpawFromPool("Background", new Vector3(lastBGPosition, 3.0f, 0.0f), Quaternion.identity);
+        GameObject background = objectPooler.SpawnFromPool("Background", new Vector3(lastBGPosition, 3.0f, 0.0f), Quaternion.identity);
 	}
 
     private void GeneratePlateform()
@@ -103,18 +103,18 @@ public class BoardManager : MonoBehaviour
 
     private void ConstructPlateformWithTiles(GameObject plateform, int plateformSize)
     {
-        GameObject leftTile = objectPooler.SpawFromPool("LeftTile", plateform.transform.position, Quaternion.identity);
+        GameObject leftTile = objectPooler.SpawnFromPool("LeftTile", plateform.transform.position, Quaternion.identity);
         leftTile.transform.parent = plateform.transform;
         leftTile.transform.localPosition = new Vector2(0, 0);
 
         for (int i = 1; i < plateformSize - 1; i++)
         {
-            GameObject middleTile = objectPooler.SpawFromPool("MiddleTile", plateform.transform.position, Quaternion.identity);
+            GameObject middleTile = objectPooler.SpawnFromPool("MiddleTile", plateform.transform.position, Quaternion.identity);
             middleTile.transform.parent = plateform.transform;
             middleTile.transform.localPosition = new Vector2(i, 0);
         }
 
-        GameObject rightTile = objectPooler.SpawFromPool("RightTile", plateform.transform.position, Quaternion.identity);
+        GameObject rightTile = objectPooler.SpawnFromPool("RightTile", plateform.transform.position, Quaternion.identity);
         rightTile.transform.parent = plateform.transform;
         rightTile.transform.localPosition = new Vector2(plateformSize - 1, 0);
     }
@@ -134,7 +134,7 @@ public class BoardManager : MonoBehaviour
 
     private int CreateCrate()
     {
-        GameObject crate = objectPooler.SpawFromPool("Crate", new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), this.currentYGeneration + 0.85f), Quaternion.identity);
+        GameObject crate = objectPooler.SpawnFromPool("Crate", new Vector2(RandomGeneration((int)lastGeneratedPlateform.transform.position.x, this.currentXGeneration), this.currentYGeneration + 0.85f), Quaternion.identity);
 		return (int)crate.transform.position.x;
     }
 

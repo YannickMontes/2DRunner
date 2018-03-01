@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
 
 			this.UpdateAnimatorVariables ();
 		} else {
-			Stop ();
+            FindObjectOfType<BoardManager>().GameOver();
 		}
 	}
 
@@ -123,10 +123,4 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-	public void Stop()
-	{
-		this.playerBody.velocity = Vector3.zero;
-		this.movement = Vector2.zero;
-		this.enabled = false;
-	}
 }

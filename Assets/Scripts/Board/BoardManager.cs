@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class BoardManager : MonoBehaviour
 {
@@ -20,24 +20,29 @@ public class BoardManager : MonoBehaviour
     private int currentYGeneration = 0;
     private GameObject lastGeneratedPlateform;
 	private float lastBGPosition = -77.4f;
+    private bool gameOver;
     // Use this for initialization
     void Start ()
     {
         this.objectPooler = ObjectPooler.instance;
+        this.gameOver = false;
 		GenerateBackground ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-		if (currentXGeneration - X_DISTANCE_TO_GENERATION < playerPosition.position.x)
+        if (!gameOver)
         {
-            Generate();
+            if (currentXGeneration - X_DISTANCE_TO_GENERATION < playerPosition.position.x)
+            {
+                Generate();
+            }
+            if (playerPosition.position.x - lastBGPosition > -5)
+            {
+                GenerateBackground();
+            }
         }
-		if (playerPosition.position.x - lastBGPosition > -5) 
-		{
-			GenerateBackground ();
-		}
 	}
 
     private void Generate()
@@ -204,5 +209,18 @@ public class BoardManager : MonoBehaviour
             return -1;
         }
         return 0;
+    }
+
+    public void GameOver()
+    {
+        if (!gameOver)
+        {
+            this.gameOver = true;
+        }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

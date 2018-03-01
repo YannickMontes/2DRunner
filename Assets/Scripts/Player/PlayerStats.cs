@@ -28,7 +28,7 @@ public class PlayerStats : MonoBehaviour {
 	{
 		if (life == 0) 
 		{
-			this.GetComponent<PlayerController> ().Stop ();
+            FindObjectOfType<BoardManager>().GameOver();
 		}
 	}
 

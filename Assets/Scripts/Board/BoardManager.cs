@@ -12,6 +12,7 @@ public class BoardManager : MonoBehaviour
 	private const int MIN_PLATEFORM_SIZE = 9;
 	private const int MAX_PLATEFORM_SIZE = 40;
 
+    public GameObject gameOverPanel;
 
     public Transform playerPosition;
 
@@ -221,6 +222,7 @@ public class BoardManager : MonoBehaviour
         if (!gameOver)
         {
             this.gameOver = true;
+            gameOverPanel.SetActive(true);
         }
     }
 

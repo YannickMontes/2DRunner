@@ -5,9 +5,11 @@ using UnityEngine;
 public class CreateDestroyer : MonoBehaviour {
 
 	private Transform playerPosition;
+    private BoardManager boardManager;
 
 	public void Start()
 	{
+        boardManager = FindObjectOfType<BoardManager>();
 		playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 	}
 
@@ -28,7 +30,7 @@ public class CreateDestroyer : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
-		if (this.transform.position.x + 40 < playerPosition.transform.position.x) 
+		if (this.transform.position.x + 40 < playerPosition.transform.position.x && !boardManager.IsGameOver()) 
 		{
 			this.gameObject.SetActive (false);
 		}

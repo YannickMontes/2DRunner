@@ -45,6 +45,11 @@ public class BoardManager : MonoBehaviour
         }
 	}
 
+    public bool IsGameOver()
+    {
+        return gameOver;
+    }
+
     private void Generate()
     {
         GeneratePlateform();
@@ -58,7 +63,7 @@ public class BoardManager : MonoBehaviour
 	private void GenerateBackground()
 	{
 		lastBGPosition += DISTANCE_BETWEEN_2_BGS;
-        GameObject background = objectPooler.SpawnFromPool("Background", new Vector3(lastBGPosition, 3.0f, 0.0f), Quaternion.identity);
+        objectPooler.SpawnFromPool("Background", new Vector3(lastBGPosition, 3.0f, 0.0f), Quaternion.identity);
 	}
 
     private void GeneratePlateform()

@@ -5,11 +5,13 @@ using UnityEngine;
 public class ObjectDestroyer : MonoBehaviour {
 	
 	private Transform playerPosition;
+    private BoardManager boardManager;
 
-	// Use this for initialization
-	void Awake ()
-	{
-		playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    // Use this for initialization
+    void Awake ()
+    {
+        boardManager = FindObjectOfType<BoardManager>();
+        playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 	}
 
 	// Update is called once per frame
@@ -20,7 +22,7 @@ public class ObjectDestroyer : MonoBehaviour {
 
 	private void Destroy()
 	{
-		if (this.transform.position.x + 60 < playerPosition.transform.position.x)
+		if (this.transform.position.x + 60 < playerPosition.transform.position.x && !boardManager.IsGameOver())
 		{
 			this.gameObject.SetActive (false);
 		}

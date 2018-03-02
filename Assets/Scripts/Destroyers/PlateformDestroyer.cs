@@ -5,10 +5,12 @@ using UnityEngine;
 public class PlateformDestroyer : MonoBehaviour {
 
     private Transform playerPosition;
+    private BoardManager boardManager;
 
-	// Use this for initialization
-	void Awake ()
+    // Use this for initialization
+    void Awake ()
     {
+        boardManager = FindObjectOfType<BoardManager>();
         playerPosition = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 	}
 	
@@ -20,7 +22,7 @@ public class PlateformDestroyer : MonoBehaviour {
 
     private void Destroy()
     {
-        if (this.transform.position.x + 60 < playerPosition.transform.position.x)
+        if (this.transform.position.x + 60 < playerPosition.transform.position.x && !boardManager.IsGameOver())
         {
             for (int i = 0; i < this.transform.childCount; i++)
             {

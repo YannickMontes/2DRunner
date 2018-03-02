@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
 
@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour {
     private Animator playerAnimator;
     private Vector2 movement;
 
+    private int travelDistance = 0;
+    private TextMeshProUGUI textTravelDistance;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour {
         this.playerBody = GetComponent<Rigidbody2D>();
         //this.playerCollider = GetComponent<Collider2D>();
         this.playerAnimator = GetComponent<Animator>();
+        this.textTravelDistance = GameObject.Find("TravelDistance").GetComponent<TextMeshProUGUI>();
 	}
 	
 	// Update is called once per frame
@@ -47,6 +51,8 @@ public class PlayerController : MonoBehaviour {
 			this.HandleInputs ();
 
 			this.UpdateAnimatorVariables ();
+
+            this.UpdateDistance();
 		} else {
             FindObjectOfType<BoardManager>().GameOver();
 		}
@@ -121,6 +127,12 @@ public class PlayerController : MonoBehaviour {
         {
             this.playerBody.position = new Vector2(this.playerBody.position.x, this.playerBody.position.y - 1);
         }
+    }
+
+    private void UpdateDistance()
+    {
+        this.travelDistance = (int)transform.position.x;
+        textTravelDistance.SetText(this.travelDistance + " m");
     }
 
 }
